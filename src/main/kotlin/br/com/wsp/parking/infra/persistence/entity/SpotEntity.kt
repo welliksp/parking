@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import jakarta.persistence.Version
 
 @Entity
 @Table(name = "spots")
@@ -13,7 +14,7 @@ class SpotEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "sector_name", nullable = false)
     val sectorName: String,
@@ -25,5 +26,5 @@ class SpotEntity(
     val lng: Double,
 
     @Column(nullable = false)
-    var occupied: Boolean = false
+    var occupied: Boolean = false,
 )
