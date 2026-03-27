@@ -1,5 +1,6 @@
 package br.com.wsp.parking.infra.client.adapter
 
+import br.com.wsp.parking.domain.exception.ResourceNotFoundException
 import br.com.wsp.parking.domain.model.GarageConfig
 import br.com.wsp.parking.domain.model.Sector
 import br.com.wsp.parking.domain.model.Spot
@@ -24,7 +25,7 @@ class GarageSimulatorClientAdapter(
             .uri("/garage")
             .retrieve()
             .bodyToMono(GarageConfigResponse::class.java)
-            .block() ?: throw IllegalStateException("Empty response from garage simulator")
+            .block() ?: throw ResourceNotFoundException("Resposta vazia do simulador de garagem")
         return GarageConfig(
             sector = response.garage.map { s ->
                 Sector(

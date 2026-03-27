@@ -7,6 +7,9 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 
+/**
+ * Entidade JPA representando uma vaga de estacionamento.
+ */
 @Entity
 @Table(name = "spots")
 class SpotJpaEntity(

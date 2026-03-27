@@ -12,6 +12,9 @@ import jakarta.persistence.Table
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
+/**
+ * Entidade JPA representando um registro de estacionamento.
+ */
 @Entity
 @Table(name = "parking_records")
 class ParkingRecordJpaEntity(

@@ -4,9 +4,10 @@ import br.com.wsp.parking.domain.model.GarageConfig
 import br.com.wsp.parking.domain.port.`in`.LoadGarageUseCase
 import br.com.wsp.parking.domain.port.out.SectorRepository
 import br.com.wsp.parking.domain.port.out.SpotRepository
-import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
 
 
 @Service
@@ -22,12 +23,13 @@ class LoadGarageUseCaseImpl(
     private val log = LoggerFactory.getLogger(javaClass)
 
     override fun execute(config: GarageConfig) {
+        log.info("Loading garage configuration: ${config.sector.size} sectors, ${config.spot.size} spots")
 
         config.sector.forEach { sector ->
 
             if (!sectorRepository.existsByName(sector.name)) {
                 sectorRepository.save(sector)
-                log.info("Sector salvo: ${sector.name} capacidade=${sector.maxCapacity} preço=${sector.basePrice}")
+                log.info("Sector saved: ${sector.name}, capacity=${sector.maxCapacity}, basePrice=${sector.basePrice}")
             }
 
         }
@@ -39,7 +41,7 @@ class LoadGarageUseCaseImpl(
             }
 
         }
-        log.info("Garagem carregada: ${config.sector.size} setores, ${config.spot.size} vagas")
+        log.info("Garage loaded successfully: ${config.sector.size} sectors, ${config.spot.size} spots")
     }
 
 }

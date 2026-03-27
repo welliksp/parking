@@ -1,6 +1,8 @@
 spring:
   application:
     name: parking
+server:
+  port: 3003
 garage:
   simulator:
     url: http://localhost:3000

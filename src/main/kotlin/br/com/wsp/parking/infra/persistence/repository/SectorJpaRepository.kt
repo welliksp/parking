@@ -9,5 +9,4 @@ interface SectorJpaRepository : JpaRepository<SectorJpaEntity, Long> {
 
     fun findByName(name: String): SectorJpaEntity?
     fun existsByName(name: String): Boolean
-
 }

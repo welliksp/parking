@@ -8,6 +8,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.math.BigDecimal
 
+
 @Entity
 @Table(name = "sectors")
 class SectorJpaEntity(

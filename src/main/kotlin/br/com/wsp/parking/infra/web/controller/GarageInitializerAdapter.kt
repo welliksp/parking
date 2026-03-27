@@ -16,22 +16,22 @@ class GarageInitializerAdapter(
 
     @EventListener(ApplicationReadyEvent::class)
     fun applicationReady() {
+        log.info("Application ready event received, initializing garage configuration")
 
         try {
-
-            log.info("Buscando configuração da garagem no simulador...")
+            log.info("Fetching garage configuration from simulator")
             val config = simulatorClient.fetchGarageConfig()
+            
+            log.debug("Garage configuration fetched: sectors=${config.sector.size}, spots=${config.spot.size}")
             loadGarageUseCase.execute(config)
-
+            
+            log.info("Garage configuration loaded successfully")
         } catch (ex: Exception) {
-
             log.error(
-                "Falha ao carregar configuração da garagem na inicialização: ${ex.message}. " +
-                        "Aplicação iniciada, mas pode não funcionar corretamente.", ex
+                "Failed to load garage configuration on startup: ${ex.message}. " +
+                "Application started but may not function correctly.", ex
             )
         }
-
-
     }
 
 
