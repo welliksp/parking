@@ -1,4 +1,4 @@
-package br.com.wsp.parking.infra.web.adapter
+package br.com.wsp.parking.infra.web.controller
 
 import br.com.wsp.parking.domain.port.`in`.LoadGarageUseCase
 import br.com.wsp.parking.domain.port.out.GarageSimulatorClient

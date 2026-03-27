@@ -2,7 +2,7 @@ package br.com.wsp.parking.infra.persistence.adapter
 
 import br.com.wsp.parking.domain.model.Spot
 import br.com.wsp.parking.domain.port.out.SpotRepository
-import br.com.wsp.parking.infra.persistence.entity.SpotEntity
+import br.com.wsp.parking.infra.persistence.entity.SpotJpaEntity
 import br.com.wsp.parking.infra.persistence.repository.SpotJpaRepository
 import org.springframework.stereotype.Component
 
@@ -28,14 +28,14 @@ class SpotPersistenceAdapter(
     override fun existsById(id: Long): Boolean = jpaRepository.existsById(id)
 
 
-    private fun Spot.toEntity() = SpotEntity(
+    private fun Spot.toEntity() = SpotJpaEntity(
         sectorName = sectorName,
         lat = lat,
         lng = lng,
         occupied = occupied
     )
 
-    private fun SpotEntity.toDomain() = Spot(
+    private fun SpotJpaEntity.toDomain() = Spot(
         id = id,
         sectorName = sectorName,
         lat = lat,

@@ -10,7 +10,7 @@ import java.math.BigDecimal
 
 @Entity
 @Table(name = "sectors")
-class SectorEntity(
+class SectorJpaEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

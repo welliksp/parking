@@ -14,11 +14,11 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "parking_records")
-class ParkingRecordEntity(
+class ParkingRecordJpaEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "license_plate", nullable = false)
     val licensePlate: String,

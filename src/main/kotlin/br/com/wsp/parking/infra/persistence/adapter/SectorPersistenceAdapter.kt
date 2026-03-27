@@ -2,7 +2,7 @@ package br.com.wsp.parking.infra.persistence.adapter
 
 import br.com.wsp.parking.domain.model.Sector
 import br.com.wsp.parking.domain.port.out.SectorRepository
-import br.com.wsp.parking.infra.persistence.entity.SectorEntity
+import br.com.wsp.parking.infra.persistence.entity.SectorJpaEntity
 import br.com.wsp.parking.infra.persistence.repository.SectorJpaRepository
 import org.springframework.stereotype.Component
 
@@ -25,7 +25,7 @@ class SectorPersistenceAdapter(
     override fun existsByName(name: String): Boolean =
         jpaRepository.existsByName(name)
 
-    private fun Sector.toEntity() = SectorEntity(
+    private fun Sector.toEntity() = SectorJpaEntity(
         name = name,
         basePrice = basePrice,
         maxCapacity = maxCapacity,
@@ -35,7 +35,7 @@ class SectorPersistenceAdapter(
         isOpen = isOpen
     )
 
-    private fun SectorEntity.toDomain() = Sector(
+    private fun SectorJpaEntity.toDomain() = Sector(
         name = name,
         basePrice = basePrice,
         maxCapacity = maxCapacity,
