@@ -1,0 +1,66 @@
+groups:
+  - name: parking_alerts
+    interval: 30s
+    rules:
+      - alert: ParkingAlmostFull
+        expr: parking_occupancy_current > 180
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Estacionamento quase lotado"
+          description: "Ocupação: {{ $value }}/200 vagas"
+
+      - alert: ParkingFull
+        expr: parking_occupancy_current >= 200
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Estacionamento lotado"
+          description: "Todas as vagas estão ocupadas"
+
+      - alert: ApplicationDown
+        expr: up{job="parking-application"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Aplicação fora do ar"
+          description: "A aplicação não está respondendo"
+
+      - alert: HighErrorRate
+        expr: rate(parking_event_error_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Taxa de erro elevada"
+          description: "Taxa de erro: {{ $value }} erros/segundo"
+
+      - alert: HighMemoryUsage
+        expr: jvm_memory_used_bytes{area="heap"} / jvm_memory_max_bytes{area="heap"} > 0.9
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Uso de memória elevado"
+          description: "Memória heap: {{ $value | humanizePercentage }}"
+
+      - alert: SectorClosed
+        expr: parking_sector_open == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Setor fechado"
+          description: "Setor {{ $labels.sector }} está fechado"
+
+      - alert: HighOccupancyRate
+        expr: parking_sector_occupancy_rate > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Taxa de ocupação alta"
+          description: "Setor {{ $labels.sector }} com {{ $value }}% de ocupação"

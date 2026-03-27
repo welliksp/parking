@@ -55,7 +55,7 @@ class WebhookController(
     )
     fun handleEvent(@RequestBody event: WebhookEventRequest): ResponseEntity<Void> {
 
-        log.debug("Webhook received: type=${event.eventType}, plate=${event.licensePlate}")
+        log.debug("Webhook recebido: tipo=${event.eventType}, placa=${event.licensePlate}")
 
         when (event.eventType.uppercase()) {
             "ENTRY" -> {

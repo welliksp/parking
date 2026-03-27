@@ -19,7 +19,7 @@ class ParkingRecordPersistenceAdapter(
     private val log = LoggerFactory.getLogger(javaClass)
 
     override fun save(record: ParkingRecord): ParkingRecord {
-        log.debug("Saving parking record: id=${record.id}, licensePlate=${record.licensePlate}, status=${record.status}")
+        log.debug("Salvando registro de estacionamento: id=${record.id}, placa=${record.licensePlate}, status=${record.status}")
         
         val entity = if (record.id == 0L) {
             jpaRepository.save(record.toNewEntity())
@@ -27,21 +27,21 @@ class ParkingRecordPersistenceAdapter(
             jpaRepository.findById(record.id)
                 .map { existing -> existing.applyDomain(record) }
                 .map { jpaRepository.save(it) }
-                .orElseThrow { IllegalStateException("Record ${record.id} not found") }
+                .orElseThrow { IllegalStateException("Registro ${record.id} não encontrado") }
         }
         
-        log.debug("Parking record saved: id=${entity.id}, licensePlate=${entity.licensePlate}")
+        log.debug("Registro de estacionamento salvo: id=${entity.id}, placa=${entity.licensePlate}")
         return entity.toDomain()
     }
 
     override fun findActiveByLicensePlate(licensePlate: String): ParkingRecord? {
-        log.debug("Finding active parking record: licensePlate=$licensePlate")
+        log.debug("Buscando registro ativo de estacionamento: placa=$licensePlate")
         val record = jpaRepository.findActiveByLicensePlate(licensePlate)?.toDomain()
         
         if (record != null) {
-            log.debug("Active parking record found: id=${record.id}, licensePlate=$licensePlate")
+            log.debug("Registro ativo encontrado: id=${record.id}, placa=$licensePlate")
         } else {
-            log.debug("No active parking record found: licensePlate=$licensePlate")
+            log.debug("Nenhum registro ativo encontrado: placa=$licensePlate")
         }
         
         return record
@@ -52,9 +52,9 @@ class ParkingRecordPersistenceAdapter(
         from: LocalDateTime,
         to: LocalDateTime
     ): BigDecimal {
-        log.debug("Calculating revenue: sector=$sectorName, from=$from, to=$to")
+        log.debug("Calculando receita: setor=$sectorName, de=$from, ate=$to")
         val revenue = jpaRepository.sumRevenueBySectorAndDateRange(sectorName, from, to)
-        log.debug("Revenue calculated: sector=$sectorName, amount=$revenue")
+        log.debug("Receita calculada: setor=$sectorName, valor=$revenue")
         return revenue
     }
 
@@ -67,7 +67,8 @@ class ParkingRecordPersistenceAdapter(
         exitTime = exitTime,
         appliedPrice = appliedPrice,
         totalAmount = totalAmount,
-        status = ParkingStatus.ENTERED
+        status = ParkingStatus.ENTERED,
+        activeKey = "${licensePlate}_ACTIVE"
     )
 
     private fun ParkingRecordJpaEntity.applyDomain(domain: ParkingRecord): ParkingRecordJpaEntity {
@@ -78,6 +79,9 @@ class ParkingRecordPersistenceAdapter(
             br.com.wsp.parking.domain.model.ParkingStatus.ENTERED -> ParkingStatus.ENTERED
             br.com.wsp.parking.domain.model.ParkingStatus.PARKED -> ParkingStatus.PARKED
             br.com.wsp.parking.domain.model.ParkingStatus.EXITED -> ParkingStatus.EXITED
+        }
+        if (domain.status == br.com.wsp.parking.domain.model.ParkingStatus.EXITED) {
+            this.activeKey = null
         }
         return this
     }

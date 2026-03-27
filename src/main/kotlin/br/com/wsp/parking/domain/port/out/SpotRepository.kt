@@ -7,6 +7,7 @@ interface SpotRepository {
     fun save(spot: Spot): Spot
     fun findById(id: Long): Spot?
     fun findByLatAndLng(lat: Double, lng: Double): Spot?
+    fun countOccupied(): Int
     fun countOccupiedBySector(sectorName: String): Int
     fun existsById(id: Long): Boolean
 }

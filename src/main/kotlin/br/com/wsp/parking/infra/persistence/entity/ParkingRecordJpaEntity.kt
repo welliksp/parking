@@ -46,6 +46,9 @@ class ParkingRecordJpaEntity(
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    var status: ParkingStatus
+    var status: ParkingStatus,
+
+    @Column(name = "active_key")
+    var activeKey: String? = null
 
 )

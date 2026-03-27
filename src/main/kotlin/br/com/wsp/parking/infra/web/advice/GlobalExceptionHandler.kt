@@ -19,6 +19,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
+import org.springframework.web.servlet.resource.NoResourceFoundException
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -248,6 +249,18 @@ class GlobalExceptionHandler {
 
         log.warn("Estado inválido: ${ex.message}")
         return ResponseEntity(errorResponse, HttpStatus.CONFLICT)
+    }
+
+    /**
+     * Tratamento para NoResourceFoundException (favicon, etc)
+     */
+    @ExceptionHandler(NoResourceFoundException::class)
+    fun handleNoResourceFound(
+        ex: NoResourceFoundException,
+        request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        // Não loga para evitar poluir os logs com requisições de favicon
+        return ResponseEntity.notFound().build()
     }
 
     /**

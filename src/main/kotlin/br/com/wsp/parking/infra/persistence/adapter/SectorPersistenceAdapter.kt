@@ -19,21 +19,21 @@ class SectorPersistenceAdapter(
 
     @CacheEvict(value = ["sectors"], allEntries = true)
     override fun save(sector: Sector): Sector {
-        log.debug("Saving sector: name=${sector.name}, capacity=${sector.maxCapacity}, isOpen=${sector.isOpen}")
+        log.debug("Salvando setor: nome=${sector.name}, capacidade=${sector.maxCapacity}, aberto=${sector.isOpen}")
         val saved = jpaRepository.save(sector.toEntity()).toDomain()
-        log.debug("Sector saved: name=${saved.name}")
+        log.debug("Setor salvo: nome=${saved.name}")
         return saved
     }
 
     @Cacheable(value = ["sectors"], key = "#name")
     override fun findByName(name: String): Sector? {
-        log.debug("Finding sector by name: name=$name")
+        log.debug("Buscando setor por nome: nome=$name")
         val sector = jpaRepository.findByName(name)?.toDomain()
         
         if (sector != null) {
-            log.debug("Sector found: name=$name")
+            log.debug("Setor encontrado: nome=$name")
         } else {
-            log.debug("Sector not found: name=$name")
+            log.debug("Setor não encontrado: nome=$name")
         }
         
         return sector
@@ -41,15 +41,15 @@ class SectorPersistenceAdapter(
 
     @Cacheable(value = ["sectors"], key = "'all'")
     override fun findAll(): List<Sector> {
-        log.debug("Finding all sectors")
+        log.debug("Buscando todos os setores")
         val sectors = jpaRepository.findAll().map { it.toDomain() }
-        log.debug("Sectors found: count=${sectors.size}")
+        log.debug("Setores encontrados: quantidade=${sectors.size}")
         return sectors
     }
 
     override fun existsByName(name: String): Boolean {
         val exists = jpaRepository.existsByName(name)
-        log.debug("Sector existence check: name=$name, exists=$exists")
+        log.debug("Verificação de existência do setor: nome=$name, existe=$exists")
         return exists
     }
 

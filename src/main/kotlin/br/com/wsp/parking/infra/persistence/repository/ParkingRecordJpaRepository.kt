@@ -14,6 +14,7 @@ interface ParkingRecordJpaRepository : JpaRepository<ParkingRecordJpaEntity, Lon
         WHERE r.licensePlate = :licensePlate
           AND r.status IN ('ENTERED', 'PARKED')
         ORDER BY r.entryTime DESC
+        LIMIT 1
     """)
     fun findActiveByLicensePlate(licensePlate: String): ParkingRecordJpaEntity?
     @Query("""

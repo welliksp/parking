@@ -16,48 +16,55 @@ class SpotPersistenceAdapter(
     private val log = LoggerFactory.getLogger(javaClass)
 
     override fun save(spot: Spot): Spot {
-        log.debug("Saving spot: id=${spot.id}, sector=${spot.sectorName}, occupied=${spot.occupied}")
+        log.debug("Salvando vaga: id=${spot.id}, setor=${spot.sectorName}, ocupada=${spot.occupied}")
         val saved = jpaRepository.save(spot.toEntity()).toDomain()
-        log.debug("Spot saved: id=${saved.id}")
+        log.debug("Vaga salva: id=${saved.id}")
         return saved
     }
 
     override fun findById(id: Long): Spot? {
-        log.debug("Finding spot by id: id=$id")
+        log.debug("Buscando vaga por id: id=$id")
         val spot = jpaRepository.findById(id).map { it.toDomain() }.orElse(null)
         
         if (spot != null) {
-            log.debug("Spot found: id=$id, sector=${spot.sectorName}")
+            log.debug("Vaga encontrada: id=$id, setor=${spot.sectorName}")
         } else {
-            log.debug("Spot not found: id=$id")
+            log.debug("Vaga não encontrada: id=$id")
         }
         
         return spot
     }
 
     override fun findByLatAndLng(lat: Double, lng: Double): Spot? {
-        log.debug("Finding spot by coordinates: lat=$lat, lng=$lng")
+        log.debug("Buscando vaga por coordenadas: lat=$lat, lng=$lng")
         val spot = jpaRepository.findByLatAndLng(lat, lng)?.toDomain()
         
         if (spot != null) {
-            log.debug("Spot found at coordinates: id=${spot.id}, lat=$lat, lng=$lng")
+            log.debug("Vaga encontrada nas coordenadas: id=${spot.id}, lat=$lat, lng=$lng")
         } else {
-            log.debug("No spot found at coordinates: lat=$lat, lng=$lng")
+            log.debug("Nenhuma vaga encontrada nas coordenadas: lat=$lat, lng=$lng")
         }
         
         return spot
     }
 
     override fun countOccupiedBySector(sectorName: String): Int {
-        log.debug("Counting occupied spots: sector=$sectorName")
+        log.debug("Contando vagas ocupadas: setor=$sectorName")
         val count = jpaRepository.countOccupiedBySector(sectorName)
-        log.debug("Occupied spots counted: sector=$sectorName, count=$count")
+        log.debug("Vagas ocupadas contadas: setor=$sectorName, quantidade=$count")
+        return count
+    }
+
+    override fun countOccupied(): Int {
+        log.debug("Contando total de vagas ocupadas")
+        val count = jpaRepository.countOccupied()
+        log.debug("Total de vagas ocupadas contadas: quantidade=$count")
         return count
     }
 
     override fun existsById(id: Long): Boolean {
         val exists = jpaRepository.existsById(id)
-        log.debug("Spot existence check: id=$id, exists=$exists")
+        log.debug("Verificação de existência da vaga: id=$id, existe=$exists")
         return exists
     }
 

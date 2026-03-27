@@ -8,6 +8,9 @@ interface SpotJpaRepository : JpaRepository<SpotJpaEntity, Long> {
 
     fun findByLatAndLng(lat: Double, lng: Double): SpotJpaEntity?
 
+    @Query("SELECT COUNT(s) FROM SpotJpaEntity s WHERE s.occupied = true")
+    fun countOccupied(): Int
+
     @Query("SELECT COUNT(s) FROM SpotJpaEntity s WHERE s.sectorName = :sectorName AND s.occupied = true")
     fun countOccupiedBySector(sectorName: String): Int
 
